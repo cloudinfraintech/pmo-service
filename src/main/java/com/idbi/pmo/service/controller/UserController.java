@@ -29,7 +29,7 @@ public class UserController {
 
 	@GetMapping("/{productId}")
 	public ResponseEntity<?> findProdyctMgrByProductId(@PathVariable("productId") Long productId) {
-		logger.info("Find product manager by product initiated.");
+		logger.info("Find product manager by product id initiated.");
 		try {
 
 		} catch (Exception e) {

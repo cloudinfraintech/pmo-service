@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -40,6 +41,11 @@ public class Product {
 			@JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(referencedColumnName = "id") })
 	private Set<Client> client;
-	@ManyToMany(mappedBy = "product")
-	private Set<User> productManager;
+	@Column(name = "pm")
+	private Long productManager;
+	@Column(name = "im")
+	private Long implManager;
+	@Column(name = "rm")
+	private Long relManager;
+
 }

@@ -10,14 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idbi.pmo.service.dto.ProductDto;
+import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.service.ProductService;
 import com.idbi.pmo.service.util.PMOEnum;
 
@@ -46,11 +45,11 @@ public class ProductController {
 		}
 	}
 
-	@GetMapping("/{clientId}")
-	public ResponseEntity<?> productByCLient(@PathVariable("clientId") Long clientId) {
+	@PostMapping("/findbyclient")
+	public ResponseEntity<?> productByCLient(@RequestBody RequestDto dto) {
 		loggger.info("Get product by client initiated:");
 		try {
-			return new ResponseEntity<List<ProductDto>>(productService.productByCLient(clientId), HttpStatus.OK);
+			return new ResponseEntity<List<ProductDto>>(productService.productByCLient(dto.getId()), HttpStatus.OK);
 		} catch (Exception e) {
 			loggger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);

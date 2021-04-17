@@ -14,16 +14,16 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idbi.pmo.service.config.JwtTokenUtil;
 import com.idbi.pmo.service.dto.JwtRequest;
 import com.idbi.pmo.service.dto.JwtResponse;
+import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.UserDto;
 import com.idbi.pmo.service.service.UserService;
 
@@ -47,14 +47,21 @@ public class JwtAuthenticationController {
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-		logger.info("Authentication initiated :");
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		try {
 
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+			logger.info("Authentication initiated :");
+			authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-		final String token = jwtTokenUtil.generateToken(userDetails);
+			final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
-		return ResponseEntity.ok(new JwtResponse(token));
+			final String token = jwtTokenUtil.generateToken(userDetails);
+
+			return ResponseEntity.ok(new JwtResponse(token));
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -78,13 +85,14 @@ public class JwtAuthenticationController {
 		}
 	}
 
-	@GetMapping("/validateEin")
-	public ResponseEntity<?> validateEin(@RequestParam("ein") String ein) {
+	@PostMapping("/validateEin")
+	public ResponseEntity<?> validateEin(@RequestBody RequestDto dto) {
+		logger.info("validate ein initiated.");
 		try {
-			return new ResponseEntity<String>(userDetailsService.validateEin(ein), HttpStatus.OK);
+			return new ResponseEntity<String>(userDetailsService.validateEin(dto.getEin()), HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 }

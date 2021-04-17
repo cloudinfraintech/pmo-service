@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.idbi.pmo.service.dto.ProductDto;
@@ -46,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 		if (null != dto.getClient()) {
 			dto.getClient().stream().forEach(clientDto -> {
 				Optional<Client> client = clientRepository.findById(clientDto.getId());
-				if (client.isEmpty()) {
+				if (!client.isPresent()) {
 					throw new PMOException("Client does not exist with id :" + clientDto.getId());
 				}
 			});
@@ -61,19 +62,21 @@ public class ProductServiceImpl implements ProductService {
 		}
 		try {
 			productRepository.save(product);
-		} catch (Exception e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new PMOException("Product already exist.");
+		} catch (Exception e) {
+			throw new PMOException(e.getMessage());
 		}
 	}
 
 	@Override
 	public List<ProductDto> productByCLient(Long clientId) {
 		Optional<Client> client = clientRepository.findById(clientId);
-		if (client.isEmpty()) {
+		if (!client.isPresent()) {
 			throw new PMOException("Client doest not exist");
 		}
-		return productRepository.findByClient(client.get()).stream().map(product -> ProductMapper.toDto(product))
-				.collect(Collectors.toList());
+		return productRepository.findByClient(client.get().getId()).stream()
+				.map(product -> ProductMapper.toDto(product)).collect(Collectors.toList());
 	}
 
 }

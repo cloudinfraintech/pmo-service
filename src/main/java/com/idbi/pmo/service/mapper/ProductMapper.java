@@ -15,7 +15,7 @@ import com.idbi.pmo.service.util.DateUtil;
  *
  */
 public class ProductMapper {
-	public static Product toProduct(ProductDto dto) throws ParseException {
+	public static Product toProduct(ProductDto dto) throws Exception {
 		Product product = new Product();
 		product.setIsActive(null != dto.getIsActive() ? dto.getIsActive() : null);
 		if (null != dto.getClient()) {
@@ -35,15 +35,14 @@ public class ProductMapper {
 		product.setModifiedBy(null != dto.getModifiedBy() ? dto.getModifiedBy() : null);
 		product.setModifiedDate(null != dto.getModifiedDate() ? DateUtil.ddMMMyyyy(dto.getModifiedDate()) : null);
 		product.setName(null != dto.getName() ? dto.getName() : null);
+		product.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
+		product.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
+		product.setRelManager(null != dto.getRelManager() ? dto.getRelManager() : null);
 		return product;
 	}
 
 	public static ProductDto toDto(Product product) {
 		ProductDto dto = new ProductDto();
-		if (null != product.getClient()) {
-			dto.setClient(
-					product.getClient().stream().map(client -> ClientMapper.toDto(client)).collect(Collectors.toSet()));
-		}
 		dto.setCreatedBy(null != product.getCreatedBy() ? product.getCreatedBy() : null);
 		dto.setCreatedDate(null != product.getCreatedDate() ? DateUtil.ddMMMyyyyStr(product.getCreatedDate()) : null);
 		dto.setId(null != product.getId() ? product.getId() : null);

@@ -21,4 +21,7 @@ public class ProductDto {
 	private Long createdBy;
 	private Long modifiedBy;
 	private Set<ClientDto> client;
+	private Long productManager;
+	private Long implManager;
+	private Long relManager;
 }

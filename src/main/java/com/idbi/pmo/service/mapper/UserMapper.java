@@ -38,8 +38,8 @@ public class UserMapper {
 				return null;
 			}).collect(Collectors.toSet()));
 		}
-		user.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
-		user.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
+		//user.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
+		//user.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
 		return user;
 	}
 
@@ -60,8 +60,8 @@ public class UserMapper {
 		if (null != user.getRole()) {
 			dto.setRole(user.getRole().stream().map(role -> RoleMapper.toDto(role)).collect(Collectors.toSet()));
 		}
-		dto.setProductManager(null != user.getProductManager() ? user.getProductManager() : null);
-		dto.setImplManager(null != user.getImplManager() ? user.getImplManager() : null);
+		//dto.setProductManager(null != user.getProductManager() ? user.getProductManager() : null);
+		//dto.setImplManager(null != user.getImplManager() ? user.getImplManager() : null);
 		return dto;
 	}
 }
