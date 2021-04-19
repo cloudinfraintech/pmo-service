@@ -51,8 +51,5 @@ public class User {
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
 			@JoinColumn(referencedColumnName = "id") })
 	private Set<Role> role;
-	@ManyToMany
-	@JoinTable(name = "user_product", joinColumns = { @JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
-			@JoinColumn(referencedColumnName = "id") })
-	private Set<Product> product;
+
 }

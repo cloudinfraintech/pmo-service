@@ -4,7 +4,6 @@
 package com.idbi.pmo.service.service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -99,14 +98,22 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public List<UserDto> findUserByProductId(Long productId) {
+	public UserDto findPMByProductId(Long productId) {
+
+		User u = userRepository.findByPMByProductId(productId);
 		return null;
-		// return userRepository.findByProductMgrByProductId(productId).stream().map(dto
-		// -> UserMapper.toDto(dto))
-		// .collect(Collectors.toList());
 	}
 
+	/**
+	 * public UserDto findIMByProductId(Long productId) { return
+	 * UserMapper.toDto(userRepository.findByPMByProductId(productId)); }
+	 * 
+	 * 
+	 * public UserDto findRMByProductId(Long productId) { return
+	 * UserMapper.toDto(userRepository.findByPMgrByProductId(productId)); }
+	 */
 	public String validateEin(String ein) {
 		return (null != egenempmstRepository.findByEmplyCd(Long.valueOf(ein)) ? "success" : "fail");
 	}
+
 }

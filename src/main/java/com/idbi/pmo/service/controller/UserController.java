@@ -10,9 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idbi.pmo.service.dto.RequestDto;
+import com.idbi.pmo.service.dto.UserDto;
 import com.idbi.pmo.service.service.UserService;
 
 /**
@@ -37,6 +41,39 @@ public class UserController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
 		}
 		return null;
+	}
+
+	@PostMapping("/pmByProduct")
+	public ResponseEntity<?> findPMByProduct(@RequestBody RequestDto dto) {
+		logger.info("Find Product manager initiated.");
+		try {
+			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId()), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PostMapping("/imByProduct")
+	public ResponseEntity<?> findIMByProduct(@RequestBody RequestDto dto) {
+		logger.info("Find implementation manager initiated.");
+		try {
+			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId()), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PostMapping("/rmByProduct")
+	public ResponseEntity<?> findRMByProduct(@RequestBody RequestDto dto) {
+		logger.info("Find relationship manager initiated.");
+		try {
+			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId()), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 
 }

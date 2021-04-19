@@ -20,7 +20,6 @@ import com.idbi.pmo.service.mapper.ClientMapper;
 import com.idbi.pmo.service.mapper.ProductMapper;
 import com.idbi.pmo.service.model.Client;
 import com.idbi.pmo.service.model.Product;
-import com.idbi.pmo.service.model.User;
 import com.idbi.pmo.service.repository.ClientRepository;
 import com.idbi.pmo.service.repository.ProductRepository;
 import com.idbi.pmo.service.repository.UserRepository;
