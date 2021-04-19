@@ -20,8 +20,10 @@ import com.idbi.pmo.service.mapper.ClientMapper;
 import com.idbi.pmo.service.mapper.ProductMapper;
 import com.idbi.pmo.service.model.Client;
 import com.idbi.pmo.service.model.Product;
+import com.idbi.pmo.service.model.User;
 import com.idbi.pmo.service.repository.ClientRepository;
 import com.idbi.pmo.service.repository.ProductRepository;
+import com.idbi.pmo.service.repository.UserRepository;
 import com.idbi.pmo.service.service.ProductService;
 import com.idbi.pmo.service.util.DateUtil;
 
@@ -39,9 +41,19 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ClientRepository clientRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
 	public void createProduct(ProductDto dto) throws Exception {
 		Product product = ProductMapper.toProduct(dto);
+		if (null == userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L)) {
+			throw new PMOException("Product manager does't exist");
+		} else if (null == userRepository.findByUserIdAndRoleId(dto.getImplManager(), 3L)) {
+			throw new PMOException("Implementation manager does't exist");
+		} else if (null == userRepository.findByUserIdAndRoleId(dto.getRelManager(), 4L)) {
+			throw new PMOException("Relationship manager does't exist");
+		}
 		product.setIsActive(true);
 		product.setCreatedDate(DateUtil.todayDate());
 		if (null != dto.getClient()) {

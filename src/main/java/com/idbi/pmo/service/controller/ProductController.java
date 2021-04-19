@@ -49,7 +49,7 @@ public class ProductController {
 	public ResponseEntity<?> productByCLient(@RequestBody RequestDto dto) {
 		loggger.info("Get product by client initiated:");
 		try {
-			return new ResponseEntity<List<ProductDto>>(productService.productByCLient(dto.getId()), HttpStatus.OK);
+			return new ResponseEntity<List<ProductDto>>(productService.productByCLient(dto.getReqId()), HttpStatus.OK);
 		} catch (Exception e) {
 			loggger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);

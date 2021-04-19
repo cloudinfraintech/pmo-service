@@ -28,7 +28,7 @@ import com.idbi.pmo.service.repository.UserRepository;
 import com.idbi.pmo.service.util.DateUtil;
 
 /**
- * @author avina
+ * @author avinash
  *
  */
 @Service
