@@ -29,4 +29,5 @@ public class UserDto {
 	private Set<ProductDto> product;
 	private Long productManager;
 	private Long implManager;
+
 }

@@ -58,7 +58,7 @@ public class UserController {
 	public ResponseEntity<?> findIMByProduct(@RequestBody RequestDto dto) {
 		logger.info("Find implementation manager initiated.");
 		try {
-			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId()), HttpStatus.OK);
+			return new ResponseEntity<UserDto>(userService.findIMByProductId(dto.getReqId()), HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
@@ -69,7 +69,7 @@ public class UserController {
 	public ResponseEntity<?> findRMByProduct(@RequestBody RequestDto dto) {
 		logger.info("Find relationship manager initiated.");
 		try {
-			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId()), HttpStatus.OK);
+			return new ResponseEntity<UserDto>(userService.findRMByProductId(dto.getReqId()), HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);

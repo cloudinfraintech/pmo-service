@@ -99,19 +99,29 @@ public class UserService implements UserDetailsService {
 	}
 
 	public UserDto findPMByProductId(Long productId) {
-
 		User u = userRepository.findByPMByProductId(productId);
-		return null;
+		UserDto dto = new UserDto();
+		dto.setId(u.getId());
+		dto.setUsername(u.getUsername());
+		return dto;
 	}
 
-	/**
-	 * public UserDto findIMByProductId(Long productId) { return
-	 * UserMapper.toDto(userRepository.findByPMByProductId(productId)); }
-	 * 
-	 * 
-	 * public UserDto findRMByProductId(Long productId) { return
-	 * UserMapper.toDto(userRepository.findByPMgrByProductId(productId)); }
-	 */
+	public UserDto findIMByProductId(Long productId) {
+		User u = userRepository.findByIMByProductId(productId);
+		UserDto dto = new UserDto();
+		dto.setId(u.getId());
+		dto.setUsername(u.getUsername());
+		return dto;
+	}
+
+	public UserDto findRMByProductId(Long productId) {
+		User u = userRepository.findByRMByProductId(productId);
+		UserDto dto = new UserDto();
+		dto.setId(u.getId());
+		dto.setUsername(u.getUsername());
+		return dto;
+	}
+
 	public String validateEin(String ein) {
 		return (null != egenempmstRepository.findByEmplyCd(Long.valueOf(ein)) ? "success" : "fail");
 	}
