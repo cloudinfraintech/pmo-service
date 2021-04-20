@@ -38,8 +38,8 @@ public class UserMapper {
 				return null;
 			}).collect(Collectors.toSet()));
 		}
-		//user.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
-		//user.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
+		user.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
+		user.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
 		return user;
 	}
 
