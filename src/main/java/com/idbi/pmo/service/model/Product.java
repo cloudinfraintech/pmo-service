@@ -6,6 +6,7 @@ package com.idbi.pmo.service.model;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import lombok.Data;
 
 /**
@@ -24,6 +28,7 @@ import lombok.Data;
  */
 @Entity
 @Data
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +40,11 @@ public class Product {
 	private Date modifiedDate;
 	private Long createdBy;
 	private Long modifiedBy;
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "product_client", joinColumns = {
 			@JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(referencedColumnName = "id") })
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Client> client;
 	@Column(name = "pm")
 	private Long productManager;

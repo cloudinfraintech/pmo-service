@@ -4,14 +4,12 @@
 package com.idbi.pmo.service.model;
 
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import lombok.Data;
 
@@ -32,6 +30,6 @@ public class Client {
 	private Date modifiedDate;
 	private Long createdBy;
 	private Long modifiedBy;
-	@ManyToMany(mappedBy = "client")
-	private Set<Product> product;
+	//@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+	//private Set<Product> product;
 }

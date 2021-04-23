@@ -13,11 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idbi.pmo.service.dto.ClientDto;
+import com.idbi.pmo.service.dto.ErrorDto;
 import com.idbi.pmo.service.service.ClientService;
 import com.idbi.pmo.service.util.PMOEnum;
 
@@ -53,6 +55,18 @@ public class ClientController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PutMapping()
+	public ResponseEntity<?> update(@RequestBody ClientDto dto) {
+		logger.info("Update client initiated.");
+		try {
+			return new ResponseEntity<ClientDto>(clientService.updateClient(dto), HttpStatus.OK);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 }

@@ -4,8 +4,10 @@
 package com.idbi.pmo.service.service.impl;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -55,22 +57,26 @@ public class ProductServiceImpl implements ProductService {
 		}
 		product.setIsActive(true);
 		product.setCreatedDate(DateUtil.todayDate());
+		Set<Client> set=new HashSet<>();
 		if (null != dto.getClient()) {
 			dto.getClient().stream().forEach(clientDto -> {
 				Optional<Client> client = clientRepository.findById(clientDto.getId());
 				if (!client.isPresent()) {
 					throw new PMOException("Client does not exist with id :" + clientDto.getId());
+				}else {
+					set.add(client.get());
 				}
 			});
-			product.setClient(dto.getClient().stream().map(clientDto -> {
+		/*	product.setClient(dto.getClient().stream().map(clientDto -> {
 				try {
 					return ClientMapper.toClient(clientDto);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 				return null;
-			}).collect(Collectors.toSet()));
+			}).collect(Collectors.toSet()));*/
 		}
+		product.setClient(set);
 		try {
 			productRepository.save(product);
 		} catch (DataIntegrityViolationException e) {
@@ -88,6 +94,33 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return productRepository.findByClient(client.get().getId()).stream()
 				.map(product -> ProductMapper.toDto(product)).collect(Collectors.toList());
+	}
+
+	@Override
+	public ProductDto update(ProductDto dto) throws Exception {
+		Optional<Product> product = productRepository.findById(dto.getId());
+		Product prod = null;
+		if (product.isPresent()) {
+			prod = product.get();
+			if (null != dto.getClient()) {
+				prod.setClient(dto.getClient().stream().map(clientDto -> {
+					try {
+						return ClientMapper.toClient(clientDto);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}).collect(Collectors.toSet()));
+			}
+			prod.setName(dto.getName());
+		} else {
+			throw new PMOException("Product not exist.");
+		}
+		Product p=productRepository.save(prod);
+		// Product product = ProductMapper.toProduct(dto);
+		// Product p = productRepository.save(product);
+		// return ProductMapper.toDto(productRepository.save(product));
+		return dto;
 	}
 
 }

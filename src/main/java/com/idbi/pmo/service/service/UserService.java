@@ -4,7 +4,9 @@
 package com.idbi.pmo.service.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,22 +102,31 @@ public class UserService implements UserDetailsService {
 
 	public UserDto findPMByProductId(Long productId) {
 		User u = userRepository.findByPMByProductId(productId);
+		if (null == u) {
+			throw new PMOException("Record not found");
+		}
 		UserDto dto = new UserDto();
 		dto.setId(u.getId());
 		dto.setUsername(u.getUsername());
 		return dto;
 	}
 
-	public UserDto findIMByProductId(Long productId) {
-		User u = userRepository.findByIMByProductId(productId);
+	public UserDto findIMByProductId(Long productId, Long productMgrId) {
+		User u = userRepository.findByIMByProductId(productId, productMgrId);
+		if (null == u) {
+			throw new PMOException("Record not found");
+		}
 		UserDto dto = new UserDto();
 		dto.setId(u.getId());
 		dto.setUsername(u.getUsername());
 		return dto;
 	}
 
-	public UserDto findRMByProductId(Long productId) {
-		User u = userRepository.findByRMByProductId(productId);
+	public UserDto findRMByProductId(Long productId, Long productMgrId, Long implMgrId) {
+		User u = userRepository.findByRMByProductId(productId, productMgrId, implMgrId);
+		if (null == u) {
+			throw new PMOException("Record not found");
+		}
 		UserDto dto = new UserDto();
 		dto.setId(u.getId());
 		dto.setUsername(u.getUsername());
@@ -124,6 +135,19 @@ public class UserService implements UserDetailsService {
 
 	public String validateEin(String ein) {
 		return (null != egenempmstRepository.findByEmplyCd(Long.valueOf(ein)) ? "success" : "fail");
+	}
+
+	public List<UserDto> findUserByRole(Long roleId) {
+		ArrayList<UserDto> dtoList = new ArrayList<>();
+		List<User> list = userRepository.findByRole(roleId);
+		for (User user : list) {
+			UserDto dto = new UserDto();
+			dto.setId(user.getId());
+			dto.setUsername(user.getUsername());
+			dtoList.add(dto);
+		}
+		return dtoList;
+
 	}
 
 }

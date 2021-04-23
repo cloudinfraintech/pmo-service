@@ -42,4 +42,10 @@ public class ClientServiceImpl implements ClientService {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public ClientDto updateClient(ClientDto dto) throws Exception {
+		Client client = ClientMapper.toClient(dto);
+		return ClientMapper.toDto(clientRepository.save(client));
+	}
+
 }

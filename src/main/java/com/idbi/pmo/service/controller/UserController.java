@@ -3,11 +3,14 @@
  */
 package com.idbi.pmo.service.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +26,7 @@ import com.idbi.pmo.service.service.UserService;
  * @author avinash
  *
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -47,7 +51,7 @@ public class UserController {
 	public ResponseEntity<?> findPMByProduct(@RequestBody RequestDto dto) {
 		logger.info("Find Product manager initiated.");
 		try {
-			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId()), HttpStatus.OK);
+			return new ResponseEntity<UserDto>(userService.findPMByProductId(dto.getReqId1()), HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
@@ -58,7 +62,8 @@ public class UserController {
 	public ResponseEntity<?> findIMByProduct(@RequestBody RequestDto dto) {
 		logger.info("Find implementation manager initiated.");
 		try {
-			return new ResponseEntity<UserDto>(userService.findIMByProductId(dto.getReqId()), HttpStatus.OK);
+			return new ResponseEntity<UserDto>(userService.findIMByProductId(dto.getReqId1(), dto.getReqId2()),
+					HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
@@ -69,10 +74,22 @@ public class UserController {
 	public ResponseEntity<?> findRMByProduct(@RequestBody RequestDto dto) {
 		logger.info("Find relationship manager initiated.");
 		try {
-			return new ResponseEntity<UserDto>(userService.findRMByProductId(dto.getReqId()), HttpStatus.OK);
+			return new ResponseEntity<UserDto>(
+					userService.findRMByProductId(dto.getReqId1(), dto.getReqId2(), dto.getReqId3()), HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PostMapping("/byRole")
+	public ResponseEntity<?> userListByRole(@RequestBody RequestDto dto) {
+		logger.info("User by role initiated.");
+		try {
+			return new ResponseEntity<List<UserDto>>(userService.findUserByRole(dto.getReqId1()), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
 		}
 	}
 

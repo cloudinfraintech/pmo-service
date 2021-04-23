@@ -11,6 +11,8 @@ import lombok.Data;
  */
 @Data
 public class RequestDto {
-	private Long reqId;
+	private Long reqId1;
 	private String ein;
+	private Long reqId2;
+	private Long reqId3;
 }

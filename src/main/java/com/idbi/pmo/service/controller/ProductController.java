@@ -10,11 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idbi.pmo.service.dto.ErrorDto;
 import com.idbi.pmo.service.dto.ProductDto;
 import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.service.ProductService;
@@ -24,7 +27,7 @@ import com.idbi.pmo.service.util.PMOEnum;
  * @author avinash
  *
  */
-
+@CrossOrigin
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -49,10 +52,22 @@ public class ProductController {
 	public ResponseEntity<?> productByCLient(@RequestBody RequestDto dto) {
 		loggger.info("Get product by client initiated:");
 		try {
-			return new ResponseEntity<List<ProductDto>>(productService.productByCLient(dto.getReqId()), HttpStatus.OK);
+			return new ResponseEntity<List<ProductDto>>(productService.productByCLient(dto.getReqId1()), HttpStatus.OK);
 		} catch (Exception e) {
 			loggger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody ProductDto dto) {
+		loggger.info("Update product initiated.");
+		try {
+			return new ResponseEntity<ProductDto>(productService.update(dto), HttpStatus.EXPECTATION_FAILED);
+
+		} catch (Exception e) {
+			loggger.error(e.getMessage());
+			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 }

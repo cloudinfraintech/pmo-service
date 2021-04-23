@@ -16,4 +16,6 @@ public interface ProductService {
 
 	List<ProductDto> productByCLient(Long clientId);
 
+	ProductDto update(ProductDto dto) throws Exception;
+
 }
