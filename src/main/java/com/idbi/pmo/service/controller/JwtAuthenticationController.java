@@ -13,6 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,23 +55,10 @@ public class JwtAuthenticationController {
 			final Authentication authentication = authenticate(authenticationRequest.getUsername(),
 					authenticationRequest.getPassword());
 
-			final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 			final String token = jwtTokenUtil.generateToken(authentication);
-
 			return ResponseEntity.ok(new JwtResponse(token));
 
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
-		}
-	}
-
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> createUser(@RequestBody UserDto dto) throws Exception {
-		logger.info("Registration initiated:");
-		try {
-			return ResponseEntity.ok(userDetailsService.save(dto));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
@@ -84,6 +72,17 @@ public class JwtAuthenticationController {
 			throw new Exception("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
+		}
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ResponseEntity<?> createUser(@RequestBody UserDto dto) throws Exception {
+		logger.info("Registration initiated:");
+		try {
+			return ResponseEntity.ok(userDetailsService.save(dto));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 
