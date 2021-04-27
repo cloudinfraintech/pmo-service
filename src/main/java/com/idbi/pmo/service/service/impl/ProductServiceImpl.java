@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import com.idbi.pmo.service.dto.ProductDto;
 import com.idbi.pmo.service.exception.PMOException;
 import com.idbi.pmo.service.mapper.ClientMapper;
+import com.idbi.pmo.service.mapper.HardwareSizingMapper;
+import com.idbi.pmo.service.mapper.MilestoneMapper;
 import com.idbi.pmo.service.mapper.ProductMapper;
 import com.idbi.pmo.service.model.Client;
 import com.idbi.pmo.service.model.Product;
@@ -57,24 +59,21 @@ public class ProductServiceImpl implements ProductService {
 		}
 		product.setIsActive(true);
 		product.setCreatedDate(DateUtil.todayDate());
-		Set<Client> set=new HashSet<>();
+		Set<Client> set = new HashSet<>();
 		if (null != dto.getClient()) {
 			dto.getClient().stream().forEach(clientDto -> {
 				Optional<Client> client = clientRepository.findById(clientDto.getId());
 				if (!client.isPresent()) {
 					throw new PMOException("Client does not exist with id :" + clientDto.getId());
-				}else {
+				} else {
 					set.add(client.get());
 				}
 			});
-		/*	product.setClient(dto.getClient().stream().map(clientDto -> {
-				try {
-					return ClientMapper.toClient(clientDto);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				return null;
-			}).collect(Collectors.toSet()));*/
+			/*
+			 * product.setClient(dto.getClient().stream().map(clientDto -> { try { return
+			 * ClientMapper.toClient(clientDto); } catch (ParseException e) {
+			 * e.printStackTrace(); } return null; }).collect(Collectors.toSet()));
+			 */
 		}
 		product.setClient(set);
 		try {
@@ -112,14 +111,29 @@ public class ProductServiceImpl implements ProductService {
 					return null;
 				}).collect(Collectors.toSet()));
 			}
+			if (null != dto.getMileStone()) {
+				prod.setMileStone(dto.getMileStone().stream().map(milestomeDto -> {
+					try {
+						return MilestoneMapper.toMilestone(milestomeDto);
+					} catch (ParseException e) {
+						throw new PMOException(e.getMessage());
+					}
+				}).collect(Collectors.toList()));
+			}
+			if (null != dto.getHardwareSizing()) {
+				prod.setHardwareSizing(dto.getHardwareSizing().stream().map(HardwareDtdo -> {
+					try {
+						return HardwareSizingMapper.toHardwareSizing(HardwareDtdo);
+					} catch (Exception e2) {
+						throw new PMOException(e2.getMessage());
+					}
+				}).collect(Collectors.toList()));
+			}
 			prod.setName(dto.getName());
 		} else {
 			throw new PMOException("Product not exist.");
 		}
-		Product p=productRepository.save(prod);
-		// Product product = ProductMapper.toProduct(dto);
-		// Product p = productRepository.save(product);
-		// return ProductMapper.toDto(productRepository.save(product));
+		Product p = productRepository.save(prod);
 		return dto;
 	}
 

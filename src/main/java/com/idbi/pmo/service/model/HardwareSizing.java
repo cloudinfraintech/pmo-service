@@ -3,9 +3,6 @@
  */
 package com.idbi.pmo.service.model;
 
-import java.util.Date;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,17 +16,11 @@ import lombok.Data;
  */
 @Entity
 @Data
-public class Role {
+public class HardwareSizing {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(unique = true)
-	private String name;
-	private Boolean isActive;
-	private Date createdDate;
-	private Date modifiedDate;
-	private Long createdBy;
-	private Long modifiedBy;
-	/**@ManyToMany(mappedBy = "role")
-	private Set<User> user;**/
+	private String server;
+	private String configuration;
+	private Integer quantity;
 }

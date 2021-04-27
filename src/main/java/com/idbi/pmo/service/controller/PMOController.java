@@ -22,7 +22,7 @@ import com.idbi.pmo.service.service.EgenempmstService;
  *
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class PMOController {
 	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
 

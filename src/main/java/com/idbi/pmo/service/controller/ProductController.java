@@ -27,7 +27,7 @@ import com.idbi.pmo.service.util.PMOEnum;
  * @author avinash
  *
  */
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -63,7 +63,7 @@ public class ProductController {
 	public ResponseEntity<?> update(@RequestBody ProductDto dto) {
 		loggger.info("Update product initiated.");
 		try {
-			return new ResponseEntity<ProductDto>(productService.update(dto), HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<ProductDto>(productService.update(dto), HttpStatus.OK);
 
 		} catch (Exception e) {
 			loggger.error(e.getMessage());

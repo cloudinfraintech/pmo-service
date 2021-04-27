@@ -28,7 +28,7 @@ import com.idbi.pmo.service.util.PMOEnum;
  *
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/client")
 public class ClientController {
 	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);

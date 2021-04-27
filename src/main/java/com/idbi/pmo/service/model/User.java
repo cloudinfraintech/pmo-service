@@ -6,6 +6,7 @@ package com.idbi.pmo.service.model;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,7 +49,7 @@ public class User {
 	private Long modifiedBy;
 	private Long productManager;
 	private Long implManager;
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
 			@JoinColumn(referencedColumnName = "id") })
 	private Set<Role> role;

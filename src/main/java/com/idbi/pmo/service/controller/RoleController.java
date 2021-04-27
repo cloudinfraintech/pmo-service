@@ -25,7 +25,7 @@ import com.idbi.pmo.service.util.PMOEnum;
  * @author avinash
  *
  */
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/role")
 public class RoleController {

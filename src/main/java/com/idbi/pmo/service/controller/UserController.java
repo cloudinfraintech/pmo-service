@@ -26,7 +26,7 @@ import com.idbi.pmo.service.service.UserService;
  * @author avinash
  *
  */
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
 public class UserController {
