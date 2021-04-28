@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +28,7 @@ import com.idbi.pmo.service.util.PMOEnum;
  *
  */
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://203.112.157.164:4200", maxAge = 3600)
 @RequestMapping("/client")
 public class ClientController {
 	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
@@ -49,7 +48,7 @@ public class ClientController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasAnyRole('USER', 'Admin')")
+	// @PreAuthorize("hasAnyRole('USER', 'Admin')")
 	public ResponseEntity<List<ClientDto>> findAll() {
 		logger.info("Get all client initiated.");
 		try {
