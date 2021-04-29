@@ -77,6 +77,7 @@ public class UserService implements UserDetailsService {
 		newUser.setIsActive(true);
 		newUser.setCreatedDate(DateUtil.todayDate());
 		newUser.setPassword(bcryptEncoder.encode(dto.getPassword()));
+		Set<Role> roleList = new HashSet<>();
 		try {
 			if (null != dto.getRole()) {
 				dto.getRole().stream().forEach(roleDto -> {
@@ -99,9 +100,12 @@ public class UserService implements UserDetailsService {
 						} else if (null == userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L)) {
 							throw new PMOException("Product Manager does not exist.");
 						}
+					} else {
+						roleList.add(role.get());
 					}
 				});
 			}
+			newUser.setRole(roleList);
 			User user = userRepository.save(newUser);
 			return UserMapper.toDto(user);
 		} catch (DataIntegrityViolationException e) {

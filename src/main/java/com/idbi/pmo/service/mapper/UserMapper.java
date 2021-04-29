@@ -28,7 +28,7 @@ public class UserMapper {
 		user.setModifiedDate(null != dto.getModifiedDate() ? DateUtil.ddMMMyyyy(dto.getCreatedDate()) : null);
 		user.setPassword(null != dto.getPassword() ? dto.getPassword() : null);
 		user.setUsername(null != dto.getUsername() ? dto.getUsername() : null);
-		if (null != dto.getRole()) {
+		/*if (null != dto.getRole()) {
 			user.setRole(dto.getRole().stream().map(roleDto -> {
 				try {
 					return RoleMapper.toRole(roleDto);
@@ -37,7 +37,7 @@ public class UserMapper {
 				}
 				return null;
 			}).collect(Collectors.toSet()));
-		}
+		}*/
 		user.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
 		user.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
 		return user;
