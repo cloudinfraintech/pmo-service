@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idbi.pmo.service.dto.ErrorDto;
 import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.UserDto;
 import com.idbi.pmo.service.service.UserService;
@@ -90,6 +91,17 @@ public class UserController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+		}
+	}
+
+	@PostMapping("/delete")
+	public ResponseEntity<?> delete(@RequestBody RequestDto dto) {
+		logger.info("User delte initiated.");
+		try {
+			return new ResponseEntity<UserDto>(userService.delete(dto), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 

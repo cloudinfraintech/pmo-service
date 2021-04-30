@@ -3,6 +3,7 @@
  */
 package com.idbi.pmo.service.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.UserDto;
 import com.idbi.pmo.service.exception.PMOException;
 import com.idbi.pmo.service.mapper.UserMapper;
@@ -161,7 +163,18 @@ public class UserService implements UserDetailsService {
 			dtoList.add(dto);
 		}
 		return dtoList;
+	}
 
+	public UserDto delete(RequestDto dto) throws ParseException {
+		User user = userRepository.findById(dto.getReqId1());
+		if (null == user) {
+			throw new PMOException("User does't exist");
+		} else {
+			user.setIsActive(false);
+			user.setModifiedBy(dto.getReqId2());
+			user.setModifiedDate(DateUtil.todayDate());
+			return UserMapper.toDto(userRepository.save(user));
+		}
 	}
 
 }

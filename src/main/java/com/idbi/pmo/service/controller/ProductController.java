@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,5 +70,28 @@ public class ProductController {
 			loggger.error(e.getMessage());
 			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
 		}
+	}
+
+	@GetMapping
+	public ResponseEntity<?> findAll() {
+		loggger.info("List product initiated.");
+		try {
+			return new ResponseEntity<List<ProductDto>>(productService.findAll(), HttpStatus.OK);
+		} catch (Exception e) {
+			loggger.error(e.getMessage());
+			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PostMapping("/findbyId")
+	public ResponseEntity<?> findById(@RequestBody RequestDto dto) {
+		loggger.info("Find product by ID");
+		try {
+			return new ResponseEntity<ProductDto>(productService.findById(dto.getReqId1()), HttpStatus.OK);
+		} catch (Exception e) {
+			loggger.error(e.getMessage());
+			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
+		}
+
 	}
 }

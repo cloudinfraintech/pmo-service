@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idbi.pmo.service.dto.ErrorDto;
+import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.RoleDto;
 import com.idbi.pmo.service.service.RoleService;
 import com.idbi.pmo.service.util.PMOEnum;
@@ -54,6 +56,17 @@ public class RoleController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+	@PostMapping("/delete")
+	public ResponseEntity<?> delete(@RequestBody RequestDto dto) {
+		logger.info("Delete role initiated.");
+		try {
+			return new ResponseEntity<RoleDto>(roleService.delete(dto), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 }

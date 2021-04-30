@@ -3,7 +3,9 @@
  */
 package com.idbi.pmo.service.service.impl;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.RoleDto;
 import com.idbi.pmo.service.exception.PMOException;
 import com.idbi.pmo.service.mapper.RoleMapper;
@@ -51,7 +54,21 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public List<RoleDto> getAllRole() {
-		return roleRepository.findAll().stream().map(role -> RoleMapper.toDto(role)).collect(Collectors.toList());
+		return roleRepository.findByIsActive(true).stream().map(role -> RoleMapper.toDto(role))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public RoleDto delete(RequestDto dto) throws ParseException {
+		Role role = roleRepository.findById(dto.getReqId1()).get();
+		if (null == role) {
+			throw new PMOException("Role does't found.");
+		} else {
+			role.setIsActive(false);
+			role.setModifiedBy(dto.getReqId2());
+			role.setModifiedDate(DateUtil.todayDate());
+			return RoleMapper.toDto(roleRepository.save(role));
+		}
 	}
 
 }

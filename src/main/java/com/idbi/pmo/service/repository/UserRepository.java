@@ -18,7 +18,7 @@ import com.idbi.pmo.service.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 	User findByUsername(String username);
 
-	User findById(Long projectManager);
+	User findById(Long userId);
 
 	@Query(value = "SELECT * FROM user u,user_role ur WHERE u.id =?1 AND  ur.role_id =?2 and ur.user_id=u.id", nativeQuery = true)
 	User findByUserIdAndRoleId(Long userId, Long roleId);

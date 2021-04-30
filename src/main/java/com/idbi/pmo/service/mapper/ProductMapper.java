@@ -73,6 +73,28 @@ public class ProductMapper {
 		dto.setModifiedDate(
 				null != product.getModifiedDate() ? DateUtil.ddMMMyyyyStr(product.getModifiedDate()) : null);
 		dto.setName(null != product.getName() ? product.getName() : null);
+		dto.setProductManager(null != product.getProductManager() ? product.getProductManager() : null);
+		dto.setImplManager(null != product.getImplManager() ? product.getImplManager() : null);
+		dto.setRelManager(null != product.getRelManager() ? product.getRelManager() : null);
+		dto.setKickOff(null != product.getKickOff() ? DateUtil.ddMMMyyyyStr(product.getKickOff()) : null);
+		dto.setStartDate(null != product.getStartDate() ? DateUtil.ddMMMyyyyStr(product.getStartDate()) : null);
+		dto.setUatDate(null != product.getUatDate() ? DateUtil.ddMMMyyyyStr(product.getUatDate()) : null);
+		dto.setLiveDate(null != product.getLiveDate() ? DateUtil.ddMMMyyyyStr(product.getLiveDate()) : null);
+		dto.setDocStatus(null != product.getDocStatus() ? product.getDocStatus() : null);
+		dto.setComment(null != product.getComment() ? product.getComment() : null);
+		dto.setActivityStatus(null != product.getActivityStatus() ? product.getActivityStatus() : null);
+		if (null != product.getClient()) {
+			dto.setClient(
+					product.getClient().stream().map(client -> ClientMapper.toDto(client)).collect(Collectors.toSet()));
+		}
+		if (null != product.getMileStone()) {
+			dto.setMileStone(product.getMileStone().stream().map(milestone -> MilestoneMapper.toDto(milestone))
+					.collect(Collectors.toList()));
+		}
+		if (null != product.getHardwareSizing()) {
+			dto.setHardwareSizing(product.getHardwareSizing().stream()
+					.map(hardwar -> HardwareSizingMapper.toDto(hardwar)).collect(Collectors.toList()));
+		}
 		return dto;
 	}
 }

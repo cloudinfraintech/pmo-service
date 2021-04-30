@@ -137,4 +137,15 @@ public class ProductServiceImpl implements ProductService {
 		return dto;
 	}
 
+	@Override
+	public List<ProductDto> findAll() {
+		return productRepository.findAll().stream().map(product -> ProductMapper.toDto(product))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public ProductDto findById(Long id) {
+		return ProductMapper.toDto(productRepository.findById(id).get());
+	}
+
 }

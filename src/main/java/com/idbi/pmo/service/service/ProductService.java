@@ -18,4 +18,8 @@ public interface ProductService {
 
 	ProductDto update(ProductDto dto) throws Exception;
 
+	List<ProductDto> findAll();
+
+	ProductDto findById(Long id);
+
 }
