@@ -28,18 +28,6 @@ public class UserMapper {
 		user.setModifiedDate(null != dto.getModifiedDate() ? DateUtil.ddMMMyyyy(dto.getCreatedDate()) : null);
 		user.setPassword(null != dto.getPassword() ? dto.getPassword() : null);
 		user.setUsername(null != dto.getUsername() ? dto.getUsername() : null);
-		/*if (null != dto.getRole()) {
-			user.setRole(dto.getRole().stream().map(roleDto -> {
-				try {
-					return RoleMapper.toRole(roleDto);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return null;
-			}).collect(Collectors.toSet()));
-		}*/
-		user.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
-		user.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
 		return user;
 	}
 
@@ -60,8 +48,8 @@ public class UserMapper {
 		if (null != user.getRole()) {
 			dto.setRole(user.getRole().stream().map(role -> RoleMapper.toDto(role)).collect(Collectors.toSet()));
 		}
-		//dto.setProductManager(null != user.getProductManager() ? user.getProductManager() : null);
-		//dto.setImplManager(null != user.getImplManager() ? user.getImplManager() : null);
+		dto.setProductManager(null != user.getProductManager() ? user.getProductManager() : null);
+		dto.setImplManager(null != user.getImplManager() ? user.getImplManager() : null);
 		return dto;
 	}
 }

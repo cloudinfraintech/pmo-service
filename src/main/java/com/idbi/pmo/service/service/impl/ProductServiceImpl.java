@@ -50,11 +50,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void createProduct(ProductDto dto) throws Exception {
 		Product product = ProductMapper.toProduct(dto);
-		if (null == userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L)) {
+		if (null == userRepository.findByUserIdAndRoleId(dto.getProductManager().getId(), 2L)) {
 			throw new PMOException("Product manager does't exist");
-		} else if (null == userRepository.findByUserIdAndRoleId(dto.getImplManager(), 3L)) {
+		} else if (null == userRepository.findByUserIdAndRoleId(dto.getImplManager().getId(), 3L)) {
 			throw new PMOException("Implementation manager does't exist");
-		} else if (null == userRepository.findByUserIdAndRoleId(dto.getRelManager(), 4L)) {
+		} else if (null == userRepository.findByUserIdAndRoleId(dto.getRelManager().getId(), 4L)) {
 			throw new PMOException("Relationship manager does't exist");
 		}
 		product.setIsActive(true);
@@ -69,11 +69,6 @@ public class ProductServiceImpl implements ProductService {
 					set.add(client.get());
 				}
 			});
-			/*
-			 * product.setClient(dto.getClient().stream().map(clientDto -> { try { return
-			 * ClientMapper.toClient(clientDto); } catch (ParseException e) {
-			 * e.printStackTrace(); } return null; }).collect(Collectors.toSet()));
-			 */
 		}
 		product.setClient(set);
 		try {

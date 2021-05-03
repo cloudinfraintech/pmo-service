@@ -26,7 +26,7 @@ public class UserDto {
 	private Long createdBy;
 	private Long modifiedBy;
 	private Set<RoleDto> role;
-	private Set<ProductDto> product;
+	//private Set<ProductDto> product;
 	private Long productManager;
 	private Long implManager;
 

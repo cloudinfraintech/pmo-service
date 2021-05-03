@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ import com.idbi.pmo.service.util.DateUtil;
  *
  */
 @Service
+@Transactional
 public class UserService implements UserDetailsService {
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Autowired
@@ -89,22 +92,29 @@ public class UserService implements UserDetailsService {
 					} else if (role.get().getName().equals(IM) && dto.getProductManager() == null) {
 						throw new PMOException("Product Manager is empty.");
 					} else if (role.get().getName().equals(IM) && dto.getProductManager() != null) {
-						if (null == userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L)) {
+						User user = userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L);
+						if (null == user) {
 							throw new PMOException("Product Manager does not exist.");
+						} else {
+							newUser.setProductManager(user.getId());
 						}
 					} else if (role.get().getName().equals(RM) && dto.getImplManager() == null) {
 						throw new PMOException("Implementation manager is empty");
 					} else if (role.get().getName().equals(RM) && dto.getImplManager() != null) {
-						if (null == userRepository.findByUserIdAndRoleId(dto.getImplManager(), 3L)) {
+						User im = userRepository.findByUserIdAndRoleId(dto.getImplManager(), 3L);
+						User pm = userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L);
+						if (null == im) {
 							throw new PMOException("Implementation manager does not exist.");
 						} else if (dto.getProductManager() == null) {
 							throw new PMOException("Product Manager is empty.");
-						} else if (null == userRepository.findByUserIdAndRoleId(dto.getProductManager(), 2L)) {
+						} else if (null == pm) {
 							throw new PMOException("Product Manager does not exist.");
+						} else {
+							newUser.setProductManager(pm.getId());
+							newUser.setImplManager(im.getId());
 						}
-					} else {
-						roleList.add(role.get());
 					}
+					roleList.add(role.get());
 				});
 			}
 			newUser.setRole(roleList);

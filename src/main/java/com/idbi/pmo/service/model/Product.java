@@ -14,9 +14,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Cache;
@@ -40,20 +40,27 @@ public class Product {
 	private Boolean isActive;
 	private Date createdDate;
 	private Date modifiedDate;
-	private Long createdBy;
-	private Long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name = "createdBy")
+	private User createdBy;
+	@ManyToOne
+	@JoinColumn(name = "modifiedBy")
+	private User modifiedBy;
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "product_client", joinColumns = {
 			@JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(referencedColumnName = "id") })
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Client> client;
-	@Column(name = "pm")
-	private Long productManager;
-	@Column(name = "im")
-	private Long implManager;
-	@Column(name = "rm")
-	private Long relManager;
+	@ManyToOne
+	@JoinColumn(name = "pm")
+	private User productManager;
+	@ManyToOne
+	@JoinColumn(name = "im")
+	private User implManager;
+	@ManyToOne
+	@JoinColumn(name = "rm")
+	private User relManager;
 	private Date kickOff;
 	private Date startDate;
 	private Date uatDate;

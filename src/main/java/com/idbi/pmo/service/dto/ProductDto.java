@@ -19,12 +19,12 @@ public class ProductDto {
 	private Boolean isActive;
 	private String createdDate;
 	private String modifiedDate;
-	private Long createdBy;
-	private Long modifiedBy;
+	private UserDto createdBy;
+	private UserDto modifiedBy;
 	private Set<ClientDto> client;
-	private Long productManager;
-	private Long implManager;
-	private Long relManager;
+	private UserDto productManager;
+	private UserDto implManager;
+	private UserDto relManager;
 	private String kickOff;
 	private String startDate;
 	private String uatDate;

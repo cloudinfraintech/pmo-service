@@ -28,7 +28,7 @@ import com.idbi.pmo.service.util.PMOEnum;
  *
  */
 @RestController
-@CrossOrigin(origins = "http://203.112.157.164:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/client")
 public class ClientController {
 	private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
@@ -48,7 +48,6 @@ public class ClientController {
 	}
 
 	@GetMapping
-	// @PreAuthorize("hasAnyRole('USER', 'Admin')")
 	public ResponseEntity<List<ClientDto>> findAll() {
 		logger.info("Get all client initiated.");
 		try {

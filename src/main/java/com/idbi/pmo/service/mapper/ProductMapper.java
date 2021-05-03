@@ -29,16 +29,16 @@ public class ProductMapper {
 				}
 			}).collect(Collectors.toSet()));
 		}
-		product.setCreatedBy(null != dto.getCreatedBy() ? dto.getCreatedBy() : null);
+		product.setCreatedBy(null != dto.getCreatedBy() ? UserMapper.toUser(dto.getCreatedBy()) : null);
 		product.setCreatedDate(null != dto.getCreatedDate() ? DateUtil.ddMMMyyyy(dto.getCreatedDate()) : null);
 		product.setId(null != dto.getId() ? dto.getId() : null);
 		product.setIsActive(null != dto.getIsActive() ? dto.getIsActive() : null);
-		product.setModifiedBy(null != dto.getModifiedBy() ? dto.getModifiedBy() : null);
+		product.setModifiedBy(null != dto.getModifiedBy() ? UserMapper.toUser(dto.getModifiedBy()) : null);
 		product.setModifiedDate(null != dto.getModifiedDate() ? DateUtil.ddMMMyyyy(dto.getModifiedDate()) : null);
 		product.setName(null != dto.getName() ? dto.getName() : null);
-		product.setProductManager(null != dto.getProductManager() ? dto.getProductManager() : null);
-		product.setImplManager(null != dto.getImplManager() ? dto.getImplManager() : null);
-		product.setRelManager(null != dto.getRelManager() ? dto.getRelManager() : null);
+		product.setProductManager(null != dto.getProductManager() ? UserMapper.toUser(dto.getProductManager()) : null);
+		product.setImplManager(null != dto.getImplManager() ? UserMapper.toUser(dto.getImplManager()) : null);
+		product.setRelManager(null != dto.getRelManager() ? UserMapper.toUser(dto.getRelManager()) : null);
 		product.setKickOff(null != dto.getKickOff() ? DateUtil.ddMMMyyyy(dto.getKickOff()) : null);
 		product.setStartDate(null != dto.getStartDate() ? DateUtil.ddMMMyyyy(dto.getStartDate()) : null);
 		product.setUatDate(null != dto.getUatDate() ? DateUtil.ddMMMyyyy(dto.getUatDate()) : null);
@@ -65,17 +65,18 @@ public class ProductMapper {
 
 	public static ProductDto toDto(Product product) {
 		ProductDto dto = new ProductDto();
-		dto.setCreatedBy(null != product.getCreatedBy() ? product.getCreatedBy() : null);
+		dto.setCreatedBy(null != product.getCreatedBy() ? UserMapper.toDto(product.getCreatedBy()) : null);
 		dto.setCreatedDate(null != product.getCreatedDate() ? DateUtil.ddMMMyyyyStr(product.getCreatedDate()) : null);
 		dto.setId(null != product.getId() ? product.getId() : null);
 		dto.setIsActive(null != product.getIsActive() ? product.getIsActive() : null);
-		dto.setModifiedBy(null != product.getModifiedBy() ? product.getModifiedBy() : null);
+		dto.setModifiedBy(null != product.getModifiedBy() ? UserMapper.toDto(product.getModifiedBy()) : null);
 		dto.setModifiedDate(
 				null != product.getModifiedDate() ? DateUtil.ddMMMyyyyStr(product.getModifiedDate()) : null);
 		dto.setName(null != product.getName() ? product.getName() : null);
-		dto.setProductManager(null != product.getProductManager() ? product.getProductManager() : null);
-		dto.setImplManager(null != product.getImplManager() ? product.getImplManager() : null);
-		dto.setRelManager(null != product.getRelManager() ? product.getRelManager() : null);
+		dto.setProductManager(
+				null != product.getProductManager() ? UserMapper.toDto(product.getProductManager()) : null);
+		dto.setImplManager(null != product.getImplManager() ? UserMapper.toDto(product.getImplManager()) : null);
+		dto.setRelManager(null != product.getRelManager() ? UserMapper.toDto(product.getRelManager()) : null);
 		dto.setKickOff(null != product.getKickOff() ? DateUtil.ddMMMyyyyStr(product.getKickOff()) : null);
 		dto.setStartDate(null != product.getStartDate() ? DateUtil.ddMMMyyyyStr(product.getStartDate()) : null);
 		dto.setUatDate(null != product.getUatDate() ? DateUtil.ddMMMyyyyStr(product.getUatDate()) : null);
