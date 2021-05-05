@@ -22,6 +22,7 @@ import com.idbi.pmo.service.mapper.ClientMapper;
 import com.idbi.pmo.service.mapper.HardwareSizingMapper;
 import com.idbi.pmo.service.mapper.MilestoneMapper;
 import com.idbi.pmo.service.mapper.ProductMapper;
+import com.idbi.pmo.service.mapper.UserMapper;
 import com.idbi.pmo.service.model.Client;
 import com.idbi.pmo.service.model.Product;
 import com.idbi.pmo.service.repository.ClientRepository;
@@ -125,11 +126,20 @@ public class ProductServiceImpl implements ProductService {
 				}).collect(Collectors.toList()));
 			}
 			prod.setName(dto.getName());
+			prod.setModifiedBy(UserMapper.toUser(dto.getModifiedBy()));
+			prod.setModifiedDate(DateUtil.todayDate());
+			prod.setProductManager(UserMapper.toUser(dto.getProductManager()));
+			prod.setImplManager(UserMapper.toUser(dto.getImplManager()));
+			prod.setRelManager(UserMapper.toUser(dto.getRelManager()));
+			prod.setKickOff(DateUtil.ddMMMyyyy(dto.getKickOff()));
+			prod.setStartDate(DateUtil.ddMMMyyyy(dto.getStartDate()));
+			prod.setUatDate(DateUtil.ddMMMyyyy(dto.getUatDate()));
+			prod.setLiveDate(DateUtil.ddMMMyyyy(dto.getLiveDate()));
+
 		} else {
 			throw new PMOException("Product not exist.");
 		}
-		Product p = productRepository.save(prod);
-		return dto;
+		return ProductMapper.toDto(productRepository.save(prod));
 	}
 
 	@Override
