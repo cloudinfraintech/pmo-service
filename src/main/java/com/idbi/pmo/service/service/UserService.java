@@ -187,4 +187,8 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
+	public UserDto findUserByUserName(String username) {
+		return UserMapper.toDto(userRepository.findByUsername(username));
+	}
+
 }

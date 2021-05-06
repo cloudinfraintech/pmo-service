@@ -69,8 +69,6 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	public String generateToken(Authentication authentication) {
-		// Map<String, Object> claims = new HashMap<>();
-		// return doGenerateToken(claims, authentication.getName());
 		final String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
 		return Jwts.builder().setSubject(authentication.getName()).claim(AUTHORITIES_KEY, authorities)

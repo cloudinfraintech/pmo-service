@@ -135,7 +135,9 @@ public class ProductServiceImpl implements ProductService {
 			prod.setStartDate(DateUtil.ddMMMyyyy(dto.getStartDate()));
 			prod.setUatDate(DateUtil.ddMMMyyyy(dto.getUatDate()));
 			prod.setLiveDate(DateUtil.ddMMMyyyy(dto.getLiveDate()));
-
+			prod.setComment(null != dto.getComment() ? dto.getComment() : null);
+			prod.setActivityStatus(null != dto.getActivityStatus() ? dto.getActivityStatus() : null);
+			prod.setDocStatus(null != dto.getDocStatus() ? dto.getDocStatus() : null);
 		} else {
 			throw new PMOException("Product not exist.");
 		}

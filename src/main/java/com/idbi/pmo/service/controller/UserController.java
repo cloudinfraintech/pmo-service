@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idbi.pmo.service.dto.ErrorDto;
 import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.UserDto;
+import com.idbi.pmo.service.model.User;
 import com.idbi.pmo.service.service.UserService;
 
 /**
@@ -103,6 +104,18 @@ public class UserController {
 			logger.error(e.getMessage());
 			return new ResponseEntity<ErrorDto>(new ErrorDto(e.getMessage(), null), HttpStatus.EXPECTATION_FAILED);
 		}
+	}
+
+	@PostMapping("/findByUsername")
+	public ResponseEntity<?> findUserByUserName(@RequestBody RequestDto dto) {
+		logger.info("Find user by user name initiated.");
+		try {
+			return new ResponseEntity<UserDto>(userService.findUserByUserName(dto.getEin()), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
+
 	}
 
 }
