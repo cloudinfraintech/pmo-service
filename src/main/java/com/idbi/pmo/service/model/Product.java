@@ -50,7 +50,6 @@ public class Product {
 	@JoinTable(name = "product_client", joinColumns = {
 			@JoinColumn(referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(referencedColumnName = "id") })
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private Set<Client> client;
 	@ManyToOne
 	@JoinColumn(name = "pm")

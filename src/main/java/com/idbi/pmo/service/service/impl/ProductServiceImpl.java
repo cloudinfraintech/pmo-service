@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 
 import com.idbi.pmo.service.dto.ProductDto;
 import com.idbi.pmo.service.exception.PMOException;
-import com.idbi.pmo.service.mapper.ClientMapper;
 import com.idbi.pmo.service.mapper.HardwareSizingMapper;
 import com.idbi.pmo.service.mapper.MilestoneMapper;
 import com.idbi.pmo.service.mapper.ProductMapper;
 import com.idbi.pmo.service.mapper.UserMapper;
 import com.idbi.pmo.service.model.Client;
 import com.idbi.pmo.service.model.Product;
+import com.idbi.pmo.service.model.User;
 import com.idbi.pmo.service.repository.ClientRepository;
 import com.idbi.pmo.service.repository.ProductRepository;
 import com.idbi.pmo.service.repository.UserRepository;
@@ -100,8 +100,12 @@ public class ProductServiceImpl implements ProductService {
 			if (null != dto.getClient()) {
 				prod.setClient(dto.getClient().stream().map(clientDto -> {
 					try {
-						return ClientMapper.toClient(clientDto);
-					} catch (ParseException e) {
+						Client client = clientRepository.findById(clientDto.getId()).get();
+						if (null == client) {
+							throw new PMOException("Client does't exist.");
+						}
+						return client;
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					return null;
@@ -128,9 +132,21 @@ public class ProductServiceImpl implements ProductService {
 			prod.setName(dto.getName());
 			prod.setModifiedBy(UserMapper.toUser(dto.getModifiedBy()));
 			prod.setModifiedDate(DateUtil.todayDate());
-			prod.setProductManager(UserMapper.toUser(dto.getProductManager()));
-			prod.setImplManager(UserMapper.toUser(dto.getImplManager()));
-			prod.setRelManager(UserMapper.toUser(dto.getRelManager()));
+			User pm = userRepository.findById(dto.getProductManager().getId());
+			if (null == pm) {
+				throw new PMOException("Product manager does't exist");
+			}
+			prod.setProductManager(pm);
+			User im = userRepository.findById(dto.getImplManager().getId());
+			if (null == im) {
+				throw new PMOException("Implementation manager does't exist");
+			}
+			prod.setImplManager(im);
+			User rm = userRepository.findById(dto.getRelManager().getId());
+			if (null == rm) {
+				throw new PMOException("Relationship manager does't exist");
+			}
+			prod.setRelManager(rm);
 			prod.setKickOff(DateUtil.ddMMMyyyy(dto.getKickOff()));
 			prod.setStartDate(DateUtil.ddMMMyyyy(dto.getStartDate()));
 			prod.setUatDate(DateUtil.ddMMMyyyy(dto.getUatDate()));
