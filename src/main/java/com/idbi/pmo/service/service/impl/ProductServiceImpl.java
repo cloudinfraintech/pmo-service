@@ -3,7 +3,6 @@
  */
 package com.idbi.pmo.service.service.impl;
 
-import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +17,15 @@ import org.springframework.stereotype.Service;
 
 import com.idbi.pmo.service.dto.ProductDto;
 import com.idbi.pmo.service.exception.PMOException;
-import com.idbi.pmo.service.mapper.HardwareSizingMapper;
-import com.idbi.pmo.service.mapper.MilestoneMapper;
 import com.idbi.pmo.service.mapper.ProductMapper;
-import com.idbi.pmo.service.mapper.UserMapper;
 import com.idbi.pmo.service.model.Client;
+import com.idbi.pmo.service.model.HardwareSizing;
+import com.idbi.pmo.service.model.Milestone;
 import com.idbi.pmo.service.model.Product;
 import com.idbi.pmo.service.model.User;
 import com.idbi.pmo.service.repository.ClientRepository;
+import com.idbi.pmo.service.repository.HardwareSizingRepository;
+import com.idbi.pmo.service.repository.MilestoneRepository;
 import com.idbi.pmo.service.repository.ProductRepository;
 import com.idbi.pmo.service.repository.UserRepository;
 import com.idbi.pmo.service.service.ProductService;
@@ -47,6 +47,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private MilestoneRepository milestoneRepository;
+
+	@Autowired
+	private HardwareSizingRepository hardwareSizingRepository;
 
 	@Override
 	public void createProduct(ProductDto dto) throws Exception {
@@ -114,8 +120,16 @@ public class ProductServiceImpl implements ProductService {
 			if (null != dto.getMileStone()) {
 				prod.setMileStone(dto.getMileStone().stream().map(milestomeDto -> {
 					try {
-						return MilestoneMapper.toMilestone(milestomeDto);
-					} catch (ParseException e) {
+						Milestone milestome = milestoneRepository.findById(milestomeDto.getId()).get();
+						if (null == milestome) {
+							throw new PMOException("Milestone does't exist.");
+						} else {
+							milestome.setMilestoneDetails(milestomeDto.getMilestoneDetails());
+							milestome.setMileStoneDt(DateUtil.ddMMMyyyy(milestomeDto.getMileStoneDt()));
+							milestome.setPercentage(milestomeDto.getPercentage());
+						}
+						return milestome;
+					} catch (Exception e) {
 						throw new PMOException(e.getMessage());
 					}
 				}).collect(Collectors.toList()));
@@ -123,14 +137,27 @@ public class ProductServiceImpl implements ProductService {
 			if (null != dto.getHardwareSizing()) {
 				prod.setHardwareSizing(dto.getHardwareSizing().stream().map(HardwareDtdo -> {
 					try {
-						return HardwareSizingMapper.toHardwareSizing(HardwareDtdo);
+
+						HardwareSizing hardwareSizing = hardwareSizingRepository.findById(HardwareDtdo.getId()).get();
+						if (null == hardwareSizing) {
+							throw new PMOException("Hardware Sizing does't exist.");
+						} else {
+							hardwareSizing.setConfiguration(HardwareDtdo.getConfiguration());
+							hardwareSizing.setQuantity(HardwareDtdo.getQuantity());
+							hardwareSizing.setServer(HardwareDtdo.getServer());
+						}
+						return hardwareSizing;
 					} catch (Exception e2) {
 						throw new PMOException(e2.getMessage());
 					}
 				}).collect(Collectors.toList()));
 			}
 			prod.setName(dto.getName());
-			prod.setModifiedBy(UserMapper.toUser(dto.getModifiedBy()));
+			User modifiedBy = userRepository.findById(dto.getModifiedBy().getId());
+			if (null == modifiedBy) {
+				throw new PMOException("Modified does't exist.");
+			}
+			prod.setModifiedBy(modifiedBy);
 			prod.setModifiedDate(DateUtil.todayDate());
 			User pm = userRepository.findById(dto.getProductManager().getId());
 			if (null == pm) {
