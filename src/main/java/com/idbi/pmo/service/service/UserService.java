@@ -76,8 +76,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	public UserDto save(UserDto dto) throws Exception {
-		// if (null == egenempmstRepository.findByEmply_Cd(dto.getUsername()))
-		// return null;
+		try {
+			if (null == egenempmstRepository.findByEmplyCd(Long.valueOf(dto.getUsername()))) {
+				throw new PMOException("User does't exist.");
+			}
+		} catch (NumberFormatException e) {
+			throw new PMOException("User name is not valid");
+		}
+
 		User newUser = UserMapper.toUser(dto);
 		newUser.setIsActive(true);
 		newUser.setCreatedDate(DateUtil.todayDate());

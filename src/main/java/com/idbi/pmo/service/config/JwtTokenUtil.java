@@ -74,7 +74,7 @@ public class JwtTokenUtil implements Serializable {
 		final String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
 		return Jwts.builder().setSubject(authentication.getName()).claim(AUTHORITIES_KEY, authorities)
-				/* .claim("user", dto.getId()) */.signWith(SignatureAlgorithm.HS512, secret)
+				.claim("user", dto.getId()).signWith(SignatureAlgorithm.HS512, secret)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)).compact();
 	}

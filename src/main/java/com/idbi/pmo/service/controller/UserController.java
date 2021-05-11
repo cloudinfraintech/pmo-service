@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idbi.pmo.service.dto.ErrorDto;
 import com.idbi.pmo.service.dto.RequestDto;
 import com.idbi.pmo.service.dto.UserDto;
-import com.idbi.pmo.service.model.User;
 import com.idbi.pmo.service.service.UserService;
 
 /**
